@@ -1,9 +1,9 @@
 #!/usr/bin/expect
 
 set timeout 120
-#set timeout -1		#Disable timeout
+#set timeout -1         #Disable timeout
 log_user 0
-log_file -a "/tmp/r2.log"
+log_file -a "/tmp/r1.log"
 
 set prompt "serial parms 9600 N81"
 spawn telnet 192.168.17.133 4001
@@ -17,13 +17,13 @@ expect $prompt
 send -- "\r"
 expect "vyos login:"
 
-#sleep 2
-
 send -- "vyos\r"
 expect "Password:"
 
 send -- "vyos\r"
-expect "vyos@vyos:~$"
+expect "Last login"
+
+sleep 2
 
 send -- "configure\r"
 expect "vyos@vyos#"
@@ -62,7 +62,9 @@ send -- "save\r"
 expect "vyos@vyos#"
 
 send -- "exit\r"
-expect "vyos@vyos:~$"
+expect "exit"
+
+sleep 1
 
 send -- "logout\r"
 expect "vyos login:"
