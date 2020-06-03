@@ -1,5 +1,5 @@
 - hosts: localhost
   roles:
-  - r1-serialBootstrap
+  - r1-serialBootStrap
   tags:
   - serialBootstrap
