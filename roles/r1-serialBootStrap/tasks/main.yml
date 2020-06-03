@@ -1,0 +1,2 @@
+- name: serial_config
+  command: expect {{ role_path }}/files/vyos.expect
