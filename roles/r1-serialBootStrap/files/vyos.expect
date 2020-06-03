@@ -1,0 +1,68 @@
+#!/usr/bin/expect
+
+set timeout 120
+#set timeout -1		#Disable timeout
+log_user 0
+log_file -a "/tmp/r2.log"
+
+set prompt "serial parms 9600 N81"
+spawn telnet 192.168.17.133 4001
+expect $prompt
+
+#puts "Use puts if you would like to see output from your expect script"
+#Examples from:
+#https://wiki.vyos.net/wiki/User_Guide
+#https://wiki.vyos.net/wiki/DHCP_server
+
+send -- "\r"
+expect "vyos login:"
+
+#sleep 2
+
+send -- "vyos\r"
+expect "Password:"
+
+send -- "vyos\r"
+expect "vyos@vyos:~$"
+
+send -- "configure\r"
+expect "vyos@vyos#"
+
+send -- "set interface ethernet eth1 address 172.16.17.1/24\r"
+expect "vyos@vyos#"
+
+send -- "set service dns forwarding listen-on eth1\r"
+expect "vyos@vyos#"
+
+send -- "set service dns forwarding name-server 8.8.8.8\r"
+expect "vyos@vyos#"
+
+send -- "set service dns forwarding name-server 8.8.4.4\r"
+expect "vyos@vyos#"
+
+send -- "set service dhcp-server shared-network-name dhcpexample authoritative enable\r"
+expect "vyos@vyos#"
+
+send -- "set service dhcp-server shared-network-name dhcpexample subnet 172.16.17.0/24 default-router 172.16.17.1\r"
+expect "vyos@vyos#"
+
+send -- "set service dhcp-server shared-network-name dhcpexample subnet 172.16.17.0/24 dns-server 172.16.17.1\r"
+expect "vyos@vyos#"
+
+send -- "set service dhcp-server shared-network-name dhcpexample subnet 172.16.17.0/24 lease 86400\r"
+expect "vyos@vyos#"
+
+send -- "set service dhcp-server shared-network-name dhcpexample subnet 172.16.17.0/24 start 172.16.17.100 stop 172.16.17.199\r"
+expect "vyos@vyos#"
+
+send -- "commit\r"
+expect "vyos@vyos#"
+
+send -- "save\r"
+expect "vyos@vyos#"
+
+send -- "exit\r"
+expect "vyos@vyos:~$"
+
+send -- "logout\r"
+expect "vyos login:"
